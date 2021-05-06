@@ -157,12 +157,20 @@ days_of_year = list(np.arange(1, days))
 room_trials = np.random.choice(days_of_year, size = (nrows, n_people))
 
 np.unique(room_trials[0])
-# make list that has 1 for each time the value of unique people in a classroom is not equal to 23
+
+# FOR LOOP DOES THIS: make list that has 1 for each time the value of unique people in a classroom is less than (aka not equal to) 23
+
+# initalize empty list
 shared_birthdays = []
+# for loop loops through each row in the array (trial = room_trials[n])
 for trial in room_trials:
+    # np.unique ouputs a list of uniqe values in an array, check the length of this
+    # if there no one shares a birthday the length of the list will be 23
     if len(np.unique(trial)) < 23: # <--- this could also be the variable n_people
+        # add 1 to the empty list (in a later example I just use a variable and do variable += 1 instead)
         shared_birthdays.append(1)
 
+# the probability that someone shares a birthday is how many times there were shared birthdays over how many trials
 p_shared_birthdays = len(shared_birthdays)/n_trials
 p_shared_birthdays
 
