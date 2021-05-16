@@ -18,9 +18,11 @@
 # Exercises:
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 die = [1, 2, 3, 4, 5, 6]
 rolls = ncols = 3
-trials = nrows = 1_00_000
+trials = nrows = 1_000_000
 sim1 = np.random.choice(die, rolls*trials).reshape(nrows, ncols)
 # What are your chances of getting an outcome payout of $2? (where we earned $3 on the $1 ante)
 # should be close to 1/36 which is a .27% chance (the theoretical probability)
@@ -58,9 +60,26 @@ lose = (true_values == 0).mean()
 # ------ ~58.08% of losing money
 
 # What is the average cost/gain per game? (think of averaging the total payout calculation across all simulations)
+2*win2 + 1*win1 + 0 - 1*lose
+# ------   average $0.50 loss per game
 
 # Chart out a histogram of all the outcomes of those 1,000,000 games
-
+sns.histplot(true_values, discrete=True)
 # Is this really a fair game of 1/6 + 1/6 + 1/6 odds?
-
+sns.histplot(true_values, stat='probability', discrete=True)
+# ----- NO! 
 # If you play 1,000,000 games in a row, what are your winnings/losses?
+# create variables with counts for each win category
+numwin2 = (sim1.sum(axis = 1) == 3).sum()
+# use the counting up how many times we rolled a 1 method from before
+rows_with_ones = (sim1 == 1)
+true_values = rows_with_ones.sum(axis = 1) 
+numwin1 = (true_values == 2).sum()
+numwin0 = (true_values == 1).sum()
+numlose = (true_values == 0).sum()
+
+# multiply the number of wins in each category by their corresponding winning amount
+(numwin2 * 2) + (numwin1 * 1) + (numwin0 * 0) - (numlose)
+
+# you would lose $501,455!!! 
+# this is why I don't gamble 
